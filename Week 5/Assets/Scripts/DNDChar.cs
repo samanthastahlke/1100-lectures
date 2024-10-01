@@ -20,6 +20,8 @@ public class DNDChar : MonoBehaviour
 
     private Dictionary<Stats, int> stats;
 
+    public List<StatField> statDisplay;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,5 +48,21 @@ public class DNDChar : MonoBehaviour
     {
         stats[s] = value;
         Debug.Log(string.Format("Set {0} to {1}.", s, value));
+    }
+
+    public SaveableCharData<Stats> Save()
+    {
+        return new SaveableCharData<Stats>(charName, stats);
+    }
+
+    public void Load(SaveableCharData<Stats> data)
+    {
+        data.LoadInto(ref charName, stats);
+
+        nameDisplay.text = charName;
+        foreach(StatField field in statDisplay)
+        {
+            field.valueLabel.text = stats[field.stat].ToString();
+        }
     }
 }
